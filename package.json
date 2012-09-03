@@ -2,7 +2,7 @@
   "author": "Edward.zhang)",
   "name": "iagent",
   "description": "a http.Agent which supports keepAlive",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "repository": {
     "url": "git://github.com/windyrobin/iAgent.git"
   },
