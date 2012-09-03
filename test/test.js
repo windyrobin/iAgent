@@ -2,11 +2,14 @@ var http   = require('http');
 var assert = require('assert');
 var HAgent = require('../index');
 
-var agent = new HAgent();
+var KPTIME = 1000;
+var agent = new HAgent({keepAliveTimeout : KPTIME});
+
 //var agent = new http.Agent();
+var HOST = '127.0.0.1';
 var PORT = 3334;
 var options = {
-  host : '127.0.0.1',
+  host : HOST,
   port : PORT,
   path : '/',
   agent : agent
@@ -39,9 +42,6 @@ function test(){
       socketCount++;
     }
     s._reqCount++;
-    //console.log(s._reqCount);
-    //var name = '127.0.0.1:' + PORT 
-    //console.log(agent.sockets[name].length);
   });
 }
 
@@ -55,12 +55,30 @@ for(var i = 0; i < R_NUM; i++) {
   }
 }
 
+function debug(str) {
+  //console.log(str);
+}
+
+function inspect(obj) {
+  //console.log(require('util').inspect(obj, false, 10));
+}
+
 function end(){
-  server.close();
-  if (agent.destroy) {
-    agent.destroy();
-  }
+  //server.close();
   //default, the maxSockets is 5
+  //debug('end called');
   assert.equal(socketCount, 5);
+
+  var name = HOST + ':' + PORT;
+  assert.equal(agent.sockets[name].length, 5) 
+  //inspect(agent);
+  //after KPTIME, the sockets would be closed
+  setTimeout(function() {
+    //inspect(agent);
+    assert.equal(agent.sockets[name], undefined); 
+
+    server.close();
+
+   }, KPTIME + 100);
 }
 
