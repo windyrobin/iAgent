@@ -37,11 +37,10 @@ function test(){
   });
 
   req.on('socket', function(s) {
-    if (s._reqCount == null) {
-      s._reqCount = 0;
+    if (s.old == null) {
+      s.old = true;
       socketCount++;
     }
-    s._reqCount++;
   });
 }
 
